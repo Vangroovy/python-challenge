@@ -36,33 +36,38 @@ with open(financials_csv, newline= "") as csvfile:
         #Total profits/losses for the period    
         total_profit_loss = int(row[1])+ total_profit_loss
 
-        #Average of Changes in profit/loss over the period
-        #avg_change = (str(len(row[1])) - str(row[1]))/(len(row[1]-2))
-
         #Calculate the change in profit month over month
+        #Create a list of all the changes and save it
         profit_change.append(int(row[1])-last_profit)
         last_profit=int(row[1])
+     
+    #Average of Changes in profit/loss over the period
+    avg_change = sum(profit_change)/len(profit_change)
 
-    #Find the max change
+    #Determine the greatest increase in profits over a period
     #What is the index of the max value
     max_change_index = profit_change.index(max(profit_change))
+    
+    #Assign the value to the date and the amount of the decrease
     max_change_date= dates[max_change_index]
     max_change_amount = profit_change[max_change_index]
-    print(max_change_date, max_change_amount)
-      
+            
+    #Determine the greatest decrease in losses(date and amount) over a period
+    #find the index of the period with the greatest decrease in profits
+    max_decrease_index = profit_change.index(min(profit_change))
 
-    #Create a list of all the changes and save it
-        
-    #Greatest decrease in losses(date and amount) over the period
+    #Assign the value to the date and the amount of the decrease
+    max_decrease_date = dates[max_decrease_index]
+    max_decrease_amount = profit_change[max_decrease_index]
  
-    #Calculate the average change in profit/loss over the period
-    #avg_change = (len(row[1])- row[1])/no_months)
     #Print the results
+    print("Financial Analysis")
+    print("__________________")
     print(f"Total Months: ", no_months)
     print(f"Total: $", total_profit_loss)
     print(f"Average Change: $", avg_change)
-    #print(f"Greatest Increase in Profits: "incr_profits_date, incr_profits)
-    #print(f"Greatest Decrease in Profits: "decr_profits_date, decr_profits)
+    print(f"Greatest Increase in Profits: ", max_change_date, " $", max_change_amount)
+    print(f"Greatest Decrease in Profits: ", max_decrease_date, " $", max_decrease_amount)
 
     #Write the results to a text file
     import csv
