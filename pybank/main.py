@@ -14,7 +14,7 @@ with open(financials_csv, newline= "") as csvfile:
     ##Read the header row
     csvheader= next(csvfile)
     print("Header:", csvheader)  
-  
+
     #Define variables
     no_months=0
     total_profit_loss = 0
@@ -23,13 +23,13 @@ with open(financials_csv, newline= "") as csvfile:
     last_profit=0
     profit_change = []
     dates = []
-   
+    
 
     #Define and execute the calculations
     for row in csvreader: 
-        #Define variables
+        #Create a list with the dates and changes
         dates.append(row[0])
-        
+            
         #count the number of months
         no_months = no_months+1
 
@@ -42,7 +42,8 @@ with open(financials_csv, newline= "") as csvfile:
         last_profit=int(row[1])
      
     #Average of Changes in profit/loss over the period
-    avg_change = sum(profit_change)/len(profit_change)
+    print(sum(profit_change))
+    avg_change = int(sum(profit_change))/no_months
 
     #Determine the greatest increase in profits over a period
     #What is the index of the max value
@@ -66,14 +67,17 @@ with open(financials_csv, newline= "") as csvfile:
     print(f"Total Months: ", no_months)
     print(f"Total: $", total_profit_loss)
     print(f"Average Change: $", avg_change)
-    print(f"Greatest Increase in Profits: ", max_change_date, " $", max_change_amount)
-    print(f"Greatest Decrease in Profits: ", max_decrease_date, " $", max_decrease_amount)
+    print(f"Greatest Increase in Profits: ", max_change_date, " $", 
+            max_change_amount)
+    print(f"Greatest Decrease in Profits: ", max_decrease_date, " $",
+            max_decrease_amount)
 
     #Write the results to a text file
     import csv
     
     #Create results list
-    output_data=[no_months, total_profit_loss,avg_change]
+    output_data=[no_months, total_profit_loss,avg_change, max_change_date, 
+    max_change_amount, max_decrease_date, max_decrease_amount]
 
     #Create the path for the filename
     financial_output=os.path.join("python-challenge", "PYBank", "data.csv")
@@ -81,8 +85,9 @@ with open(financials_csv, newline= "") as csvfile:
     #write data to a .csv file
     with open(financial_output, "w", newline="") as csvfile:
         writer = csv.writer(csvfile, delimiter=",")
-        writer.writerow(["Total Months", "Total Profit/Loss", "Average Change",
-                        "Greatest increase in profits", "Greatest decrease in profits"])
+        writer.writerow(["Total months", "Total profit/loss", "Average change",
+                        "Date of greatest increase in profits", "Increase in profits",
+                         "Date of greatest decrease in profits", "Greatest decrease in profits"])
         writer.writerow(output_data)
        
         
