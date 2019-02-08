@@ -5,7 +5,7 @@ import csv
 import os
 
 ##Import the file
-financials_csv=os.path.join("python-challenge", "PyBank","budget_data_copy.csv")
+financials_csv=os.path.join("python-challenge", "pybank","budget_data_copy.csv")
 
 ##Open and read the CSV
 with open(financials_csv, newline= "") as csvfile:
@@ -13,18 +13,16 @@ with open(financials_csv, newline= "") as csvfile:
 
     ##Read the header row
     csvheader= next(csvfile)
-    print("Header:", csvheader)  
-
+    
     #Define variables
     no_months=0
     total_profit_loss = 0
     avg_change=0
-    first_profit = 0
-    last_profit=0
+    first_profit_change = 0
+    last_profit_change=0
     profit_change = []
     dates = []
     
-
     #Define and execute the calculations
     for row in csvreader: 
         #Create a list with the dates and changes
@@ -38,12 +36,13 @@ with open(financials_csv, newline= "") as csvfile:
 
         #Calculate the change in profit month over month
         #Create a list of all the changes and save it
-        profit_change.append(int(row[1])-last_profit)
-        last_profit=int(row[1])
+        profit_change.append(int(row[1])-last_profit_change)
+        last_profit_change=int(row[1])
      
     #Average of Changes in profit/loss over the period
-    print(sum(profit_change))
-    avg_change = int(sum(profit_change))/no_months
+    #Find the first variable in the list so it can be removed from the average calc
+    first_profit_change = int(profit_change[0])   
+    avg_change = (int(sum(profit_change))- first_profit_change)/(no_months-1)
 
     #Determine the greatest increase in profits over a period
     #What is the index of the max value
@@ -80,7 +79,7 @@ with open(financials_csv, newline= "") as csvfile:
     max_change_amount, max_decrease_date, max_decrease_amount]
 
     #Create the path for the filename
-    financial_output=os.path.join("python-challenge", "PYBank", "data.csv")
+    financial_output=os.path.join("python-challenge", "Pybank", "data.csv")
 
     #write data to a .csv file
     with open(financial_output, "w", newline="") as csvfile:
