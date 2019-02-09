@@ -4,7 +4,10 @@
 import csv
 import os
 
-##Import the file
+def print_and_write(file, data):
+    print(data, end="")
+    file.write(data)
+
 financials_csv=os.path.join("python-challenge", "pybank","budget_data_copy.csv")
 
 ##Open and read the CSV
@@ -12,40 +15,38 @@ with open(financials_csv, newline= "") as csvfile:
     csvreader = csv.reader(csvfile, delimiter=",")
 
     ##Read the header row
-    csvheader= next(csvfile)
+    csvheader = next(csvfile)
     
     #Define variables
-    no_months=0
-    total_profit_loss = 0
-    avg_change=0
-    first_profit_change = 0
-    last_profit_change=0
-    profit_change = []
+
     dates = []
-    
+    no_months = 0
+    total_profit_loss = 0
+    profit_change = []
+    last_profit_change = 0
+        
     #Define and execute the calculations
     for row in csvreader: 
         #Create a list with the dates and changes
         dates.append(row[0])
             
         #count the number of months
-        no_months = no_months+1
+        no_months = no_months + 1
 
         #Total profits/losses for the period    
-        total_profit_loss = int(row[1])+ total_profit_loss
+        total_profit_loss = int(row[1]) + total_profit_loss
 
         #Calculate the change in profit month over month
         #Create a list of all the changes and save it
-        profit_change.append(int(row[1])-last_profit_change)
-        last_profit_change=int(row[1])
+        profit_change.append(int(row[1]) - last_profit_change)
+        last_profit_change = int(row[1])
      
     #Average of Changes in profit/loss over the period
     #Find the first variable in the list so it can be removed from the average calc
     first_profit_change = int(profit_change[0])   
-    avg_change = (int(sum(profit_change))- first_profit_change)/(no_months-1)
+    avg_change = (int(sum(profit_change)) - first_profit_change) / (no_months - 1)
 
-    #Determine the greatest increase in profits over a period
-    #What is the index of the max value
+    #What is the index of the greatest increase in profits over a period
     max_change_index = profit_change.index(max(profit_change))
     
     #Assign the value to the date and the amount of the decrease
@@ -59,35 +60,16 @@ with open(financials_csv, newline= "") as csvfile:
     #Assign the value to the date and the amount of the decrease
     max_decrease_date = dates[max_decrease_index]
     max_decrease_amount = profit_change[max_decrease_index]
- 
-    #Print the results
-    print("Financial Analysis")
-    print("__________________")
-    print(f"Total Months: ", no_months)
-    print(f"Total: $", total_profit_loss)
-    print(f"Average Change: $", avg_change)
-    print(f"Greatest Increase in Profits: ", max_change_date, " $", 
-            max_change_amount)
-    print(f"Greatest Decrease in Profits: ", max_decrease_date, " $",
-            max_decrease_amount)
 
     #Create the path for the filename
     financial_output=os.path.join("python-challenge", "pybank", "data.txt")
 
-    #write data to a .txt file
+    #print and write the results
     with open(financial_output, "w", newline="") as textfile:
-        textfile.write("Financial Analysis \n")
-        textfile.write("__________________\n")
-        textfile.write("Total Months: %s \n" % no_months)
-        textfile.write("Total: $ %s \n" % total_profit_loss)
-        textfile.write("Average Change: $ %s \n" % avg_change)
-        textfile.write("Greatest Increase in Profits: %s " % max_change_date)
-        textfile.write("$ %s \n" % max_change_amount)
-        textfile.write("Greatest Decrease in Profits: %s"% max_decrease_date)
-        textfile.write("$ %s " %max_decrease_amount)
-       
-        
-
-
-        
-        
+        print_and_write(textfile, "Financial Analysis \n")
+        print_and_write(textfile, "------------------\n")
+        print_and_write(textfile, "Total Months: %s \n" % no_months)
+        print_and_write(textfile, "Total: $ %s \n" % total_profit_loss)
+        print_and_write(textfile, "Average Change: $ %.2f \n" % avg_change)
+        print_and_write(textfile, "Greatest Increase in Profits: %s ($%s)\n " % (max_change_date, max_change_amount))
+        print_and_write(textfile, "Greatest Decrease in Profits: %s ($%s)\n" % (max_decrease_date, max_decrease_amount))     
