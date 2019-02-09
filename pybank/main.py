@@ -71,23 +71,20 @@ with open(financials_csv, newline= "") as csvfile:
     print(f"Greatest Decrease in Profits: ", max_decrease_date, " $",
             max_decrease_amount)
 
-    #Write the results to a text file
-    import csv
-    
-    #Create results list
-    output_data=[no_months, total_profit_loss,avg_change, max_change_date, 
-    max_change_amount, max_decrease_date, max_decrease_amount]
-
     #Create the path for the filename
-    financial_output=os.path.join("python-challenge", "Pybank", "data.csv")
+    financial_output=os.path.join("python-challenge", "pybank", "data.txt")
 
-    #write data to a .csv file
-    with open(financial_output, "w", newline="") as csvfile:
-        writer = csv.writer(csvfile, delimiter=",")
-        writer.writerow(["Total months", "Total profit/loss", "Average change",
-                        "Date of greatest increase in profits", "Increase in profits",
-                         "Date of greatest decrease in profits", "Greatest decrease in profits"])
-        writer.writerow(output_data)
+    #write data to a .txt file
+    with open(financial_output, "w", newline="") as textfile:
+        textfile.write("Financial Analysis \n")
+        textfile.write("__________________\n")
+        textfile.write("Total Months: %s \n" % no_months)
+        textfile.write("Total: $ %s \n" % total_profit_loss)
+        textfile.write("Average Change: $ %s \n" % avg_change)
+        textfile.write("Greatest Increase in Profits: %s " % max_change_date)
+        textfile.write("$ %s \n" % max_change_amount)
+        textfile.write("Greatest Decrease in Profits: %s"% max_decrease_date)
+        textfile.write("$ %s " %max_decrease_amount)
        
         
 
