@@ -3,8 +3,6 @@
 #Load file
 import csv
 import os
-
-##Import the file
 election_csv=os.path.join("python-challenge", "PyPoll","election_data_copy.csv")
 
 ##Open and read the CSV
@@ -20,7 +18,7 @@ with open(election_csv, newline= "") as csvfile:
     total_votes = 0 
     percent_of_votes = []
     candidate_total_votes = []
-    final_stats_percentage=[]
+    final_stats_percentage = []
 
     #Create Loop to read all the votes, count the total and find unique candidates
     for row in csvreader: 
@@ -32,7 +30,7 @@ with open(election_csv, newline= "") as csvfile:
             candidate_list.append(row[2])
         
         #Calculate the total votes cast
-        total_votes = total_votes+1           
+        total_votes = total_votes + 1           
 
     #Print results in table
     print("Election Results")
@@ -41,17 +39,16 @@ with open(election_csv, newline= "") as csvfile:
     print("--------------------------")
 
     #Compute and print stats by candidate
-    for cname in candidate_list:
+    for candidate_name in candidate_list:
         
         #Calculate the percentage of votes for each candidate
-        percent_of_votes = votes_list.count(cname)/total_votes*100
+        percent_of_votes = votes_list.count(candidate_name) / total_votes*100
 
         #Calculate the votes by candidate
-        vote_by_candidate = votes_list.count(cname)
+        vote_by_candidate = votes_list.count(candidate_name)
 
         #Print the stats by candidate
-        #print(cname,":", round(percent_of_votes),"%", "(", vote_by_candidate, ')')
-        print("%s: %.3f %% ( %i )" % (cname, percent_of_votes, vote_by_candidate))  
+        print("%s: %.3f %% (%i)" % (candidate_name, percent_of_votes, vote_by_candidate))  
 
         #Save the vote_by_candidate into a list
         final_stats_percentage.append(percent_of_votes)
@@ -75,10 +72,10 @@ with open(election_csv, newline= "") as csvfile:
         textfile.write("--------------------------\n")
         textfile.write("Total Votes: %s \n" % total_votes)
         textfile.write("--------------------------\n")
-        for cname in candidate_list:
-            textfile.write("%s: " % cname)
-            textfile.write("%.3f%% " % (votes_list.count(cname)/total_votes*100))
-            textfile.write("(%d) \n" % votes_list.count(cname))
+        for candidate_name in candidate_list:
+            textfile.write("%s: " % candidate_name)
+            textfile.write("%.3f%% " % (votes_list.count(candidate_name) / total_votes * 100))
+            textfile.write("(%d) \n" % votes_list.count(candidate_name))
         textfile.write("-------------------------- \n")
         textfile.write("The winner is: %s\n"% winner)
         textfile.write("--------------------------")
