@@ -3,6 +3,11 @@
 #Load file
 import csv
 import os
+
+def print_and_write(file, data):
+    print(data, end="")
+    file.write(data)
+
 election_csv=os.path.join("python-challenge", "PyPoll","election_data_copy.csv")
 
 ##Open and read the CSV
@@ -12,70 +17,38 @@ with open(election_csv, newline= "") as csvfile:
     #Read the header row
     csvheader= next(csvfile)
     
-    #Define variables
-    votes_list = []    
-    candidate_list = []
-    total_votes = 0 
-    percent_of_votes = []
-    final_stats_percentage = []
+    #Define variables   
+    candidate_vote_counts = {}    
 
-    #Create Loop to read all the votes, count the total and find unique candidates
+    #Create dictionary to read all the votes, count the total and find unique candidates
     for row in csvreader: 
-        #Create a list with all the votes
-        votes_list.append(row[2])
-        
-        #find unique candidates and build a list
-        if row[2] not in candidate_list:
-            candidate_list.append(row[2])
-        
-        #Calculate the total votes cast
-        total_votes = total_votes + 1           
-
-    #Print results in table
-    print("Election Results")
-    print("--------------------------")
-    print("Total Votes: ", total_votes)
-    print("--------------------------")
-
+        candidate_name = row[2]
+        if candidate_name in candidate_vote_counts:
+            candidate_vote_counts[candidate_name] += 1
+        else:
+            candidate_vote_counts[candidate_name] = 1
+    total_votes = sum(candidate_vote_counts.values())
    
     #Create the path for the filename
     output_file = os.path.join("python-challenge", "Pypoll", "data.txt")
     
     #Write data to a .txt file
     with open(output_file, "w", newline="") as textfile:
-        textfile.write("Election Results\n" )
-        textfile.write("--------------------------\n")
-        textfile.write("Total Votes: %s \n" % total_votes)
-        textfile.write("--------------------------\n")
-        for candidate_name in candidate_list:
+        print_and_write(textfile, "Election Results\n" )
+        print_and_write(textfile, "--------------------------\n")
+        print_and_write(textfile, "Total Votes: %s \n" % total_votes)
+        print_and_write(textfile, "--------------------------\n")
+        for candidate_name in candidate_vote_counts.keys():
             
-            #Calculate the votes by candidate
-            vote_by_candidate = votes_list.count(candidate_name)
-
             #Calculate the percentage of votes for each candidate
-            percent_of_votes = vote_by_candidate / total_votes * 100       
-
-            #Print the stats by candidate
-            print("%s: %.3f %% (%i)" % (candidate_name, percent_of_votes, vote_by_candidate))  
-
-            #Save the vote_by_candidate into a list
-            final_stats_percentage.append(percent_of_votes)
+            percent_of_votes = candidate_vote_counts[candidate_name] / total_votes * 100  
             
             #Write the stats by candidate to the textfile
-            textfile.write("%s: %.3f %% (%i)\n" % (candidate_name, percent_of_votes, vote_by_candidate))
+            print_and_write(textfile, "%s: %.3f %% (%i)\n" % (candidate_name, percent_of_votes, candidate_vote_counts[candidate_name]))
         
-        #Find the index with the most votes
-        winner_index = final_stats_percentage.index(max(final_stats_percentage))
-    
-        #Use index to assign name of winner
-        winner = str(candidate_list[winner_index])
-
+        #Winner equals the key with the largest value
+        winner= max(candidate_vote_counts, key=candidate_vote_counts.get)
         #Write the winner information to the text file
-        textfile.write("-------------------------- \n")
-        textfile.write("The winner is: %s\n"% winner)
-        textfile.write("--------------------------")
-    
-    #Print the winner information    
-    print("--------------------------")
-    print("The winner is: ",winner)
-    print("--------------------------")
+        print_and_write(textfile, "-------------------------- \n")
+        print_and_write(textfile, "The winner is: %s\n"% winner)
+        print_and_write(textfile, "--------------------------")
