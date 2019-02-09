@@ -48,7 +48,8 @@ with open(election_csv, newline= "") as csvfile:
         
         #Winner equals the key with the largest value
         winner= max(candidate_vote_counts, key=candidate_vote_counts.get)
+        
         #Write the winner information to the text file
         print_and_write(textfile, "-------------------------- \n")
         print_and_write(textfile, "The winner is: %s\n"% winner)
-        print_and_write(textfile, "--------------------------")
+        print_and_write(textfile, "--------------------------\n")
