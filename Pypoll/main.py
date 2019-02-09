@@ -17,7 +17,6 @@ with open(election_csv, newline= "") as csvfile:
     candidate_list = []
     total_votes = 0 
     percent_of_votes = []
-    candidate_total_votes = []
     final_stats_percentage = []
 
     #Create Loop to read all the votes, count the total and find unique candidates
@@ -38,31 +37,7 @@ with open(election_csv, newline= "") as csvfile:
     print("Total Votes: ", total_votes)
     print("--------------------------")
 
-    #Compute and print stats by candidate
-    for candidate_name in candidate_list:
-        
-        #Calculate the percentage of votes for each candidate
-        percent_of_votes = votes_list.count(candidate_name) / total_votes*100
-
-        #Calculate the votes by candidate
-        vote_by_candidate = votes_list.count(candidate_name)
-
-        #Print the stats by candidate
-        print("%s: %.3f %% (%i)" % (candidate_name, percent_of_votes, vote_by_candidate))  
-
-        #Save the vote_by_candidate into a list
-        final_stats_percentage.append(percent_of_votes)
-        candidate_total_votes.append(vote_by_candidate) 
-    
-    #Find the index with the most votes
-    winner_index = final_stats_percentage.index(max(final_stats_percentage))
-    
-    #Use index to assign name of winner
-    winner = str(candidate_list[winner_index])
-    print("--------------------------")
-    print("The winner is: ",winner)
-    print("--------------------------")
-
+   
     #Create the path for the filename
     output_file = os.path.join("python-challenge", "Pypoll", "data.txt")
     
@@ -73,10 +48,34 @@ with open(election_csv, newline= "") as csvfile:
         textfile.write("Total Votes: %s \n" % total_votes)
         textfile.write("--------------------------\n")
         for candidate_name in candidate_list:
-            textfile.write("%s: " % candidate_name)
-            textfile.write("%.3f%% " % (votes_list.count(candidate_name) / total_votes * 100))
-            textfile.write("(%d) \n" % votes_list.count(candidate_name))
+            
+            #Calculate the votes by candidate
+            vote_by_candidate = votes_list.count(candidate_name)
+
+            #Calculate the percentage of votes for each candidate
+            percent_of_votes = vote_by_candidate / total_votes * 100       
+
+            #Print the stats by candidate
+            print("%s: %.3f %% (%i)" % (candidate_name, percent_of_votes, vote_by_candidate))  
+
+            #Save the vote_by_candidate into a list
+            final_stats_percentage.append(percent_of_votes)
+            
+            #Write the stats by candidate to the textfile
+            textfile.write("%s: %.3f %% (%i)\n" % (candidate_name, percent_of_votes, vote_by_candidate))
+        
+        #Find the index with the most votes
+        winner_index = final_stats_percentage.index(max(final_stats_percentage))
+    
+        #Use index to assign name of winner
+        winner = str(candidate_list[winner_index])
+
+        #Write the winner information to the text file
         textfile.write("-------------------------- \n")
         textfile.write("The winner is: %s\n"% winner)
         textfile.write("--------------------------")
     
+    #Print the winner information    
+    print("--------------------------")
+    print("The winner is: ",winner)
+    print("--------------------------")
